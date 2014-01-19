@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include "readline.h"
+#include "console.h"
+#include "log.h"
 
 #include "room.h"
 #include "world_picker.h"
@@ -12,6 +13,7 @@ extern "C" {
 
 int main(int argc, char* argv[]) {
 
+    Log::setLevel(Log::LEVEL_DEBUG);
     lua_State* L;
 
     L = lua_open();
@@ -20,7 +22,10 @@ int main(int argc, char* argv[]) {
     WorldPicker picker;
     char* luaFile = picker.pickWorld();
 
-    printf("Loading file: %s\n", luaFile);
+    Log::debug("Testing");
+    Log::info("Loading file: %s", luaFile);
+    Log::warn("Testing");
+    Log::error("Testing");
 
     luaL_dofile(L, luaFile);
 
