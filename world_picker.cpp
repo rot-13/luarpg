@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "world_picker.h"
 #include "console.h"
+#include "log.h"
 
 WorldPicker::WorldPicker() {
     
@@ -12,14 +13,14 @@ char* WorldPicker::pickWorld() {
     std::vector<char*> worlds = listWorlds(folder);
 
     for (int i = 0; i < worlds.size(); ++i) {
-        Console::print("%d. %s", i, worlds[i]);
+        Console::print("\x1b[37;1m%d.\x1b[34;1m %s\x1b[0m", i, worlds[i]);
     }
 
-    char* selectionString = Console::read("Choose world: ");
+    char* selectionString = Console::read("\x1b[37;1mChoose world\x1b[0m: ");
 
     int selection = atoi(selectionString);
 
-    Console::print("You chose: %d. %s", selection, worlds[selection]);
+    Log::debug("You chose: %d. %s", selection, worlds[selection]);
 
     char* filePath = new char[strlen(folder) + strlen(worlds[selection]) + 1];
     sprintf(filePath, "%s/%s", folder, worlds[selection]);

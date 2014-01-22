@@ -10,5 +10,13 @@ void Console::print(const char* line, ...) {
 }
 
 char* Console::read(const char* prompt) {
-    return readline(prompt);
+    static bool historyInitialized = false;
+
+    if (!historyInitialized) {
+        using_history();
+        historyInitialized = true;
+    }
+    char* line = readline(prompt);
+    add_history(line);
+    return line;
 }

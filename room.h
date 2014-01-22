@@ -1,4 +1,5 @@
-
+#ifndef ROOM_H_
+#define ROOM_H_
 
 class Room {
     public:
@@ -11,3 +12,5 @@ class Room {
 
         const char* description;
 };
+
+#endif // ROOM_H_

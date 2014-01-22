@@ -1,7 +1,33 @@
+#ifndef CONSOLE_H_
+#define CONSOLE_H_
+
 #include <stdarg.h>
 
 class Console {
     public:
+        unsigned int BOLD          = 0b00000000000000000000000000000001;
+        unsigned int UNDERLINE     = 0b00000000000000000000000000000010;
+        unsigned int BLINK         = 0b00000000000000000000000000000100;
+        unsigned int NEGATIVE      = 0b00000000000000000000000000001000;
+        unsigned int COLOR_BLACK   = 0b00000000000000000000000000010000;
+        unsigned int COLOR_RED     = 0b00000000000000000000000000100000;
+        unsigned int COLOR_GREEN   = 0b00000000000000000000000001000000;
+        unsigned int COLOR_YELLOW  = 0b00000000000000000000000010000000;
+        unsigned int COLOR_BLUE    = 0b00000000000000000000000100000000;
+        unsigned int COLOR_MAGENTA = 0b00000000000000000000001000000000;
+        unsigned int COLOR_CYAN    = 0b00000000000000000000010000000000;
+        unsigned int COLOR_WHITE   = 0b00000000000000000000100000000000;
+        unsigned int BG_BLACK      = 0b00000000000000000001000000000000;
+        unsigned int BG_RED        = 0b00000000000000000010000000000000;
+        unsigned int BG_GREEN      = 0b00000000000000000100000000000000;
+        unsigned int BG_YELLOW     = 0b00000000000000001000000000000000;
+        unsigned int BG_BLUE       = 0b00000000000000010000000000000000;
+        unsigned int BG_MAGENTA    = 0b00000000000000100000000000000000;
+        unsigned int BG_CYAN       = 0b00000000000001000000000000000000;
+        unsigned int BG_WHITE      = 0b00000000000010000000000000000000;
+
         static void print(const char* line, ...);
         static char* read(const char* prompt);
 };
+
+#endif // CONSOLE_H_

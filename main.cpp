@@ -2,8 +2,10 @@
 #include "console.h"
 #include "log.h"
 
-#include "room.h"
+#include "game_engine.h"
 #include "world_picker.h"
+#include "room.h"
+#include "actions/room_action_handler.h"
 
 extern "C" {
     #include "lua5.1/lua.h"
@@ -11,31 +13,51 @@ extern "C" {
     #include "lua5.1/lauxlib.h"
 }
 
+Room room("Starting room");
+Room north("North room");
+
+void onNorth();
+
 int main(int argc, char* argv[]) {
 
-    Log::setLevel(Log::LEVEL_DEBUG);
-    lua_State* L;
+    room.north = &north;
 
-    L = lua_open();
-    luaL_openlibs(L);
+    RoomActionHandler rah(&room);
+    rah.setOnNorth(&onNorth);
 
-    WorldPicker picker;
-    char* luaFile = picker.pickWorld();
+    bool running = true;
+    Console::print(room.description);
+    while (running) {
+        char* input = Console::read("> ");
+        if (strcmp(input, "exit") == 0) {
+            return 0;
+        }
+        if (strcmp(input, "list") == 0) {
+            std::vector<const char*> list = rah.getActions();
+            for (int i = 0; i < list.size(); ++i) {
+                Console::print(list[i]);
+            }
+        }
+        rah.runAction(input);
+    }
 
-    Log::debug("Testing");
-    Log::info("Loading file: %s", luaFile);
-    Log::warn("Testing");
-    Log::error("Testing");
+    //char* worldFile = NULL;
 
-    luaL_dofile(L, luaFile);
+    //if (argc > 1) {
+        //worldFile = argv[1];
+    //} else {
+        //WorldPicker worldPicker;
+        //worldFile = worldPicker.pickWorld();
+    //}
 
-    //Room exit("You made it to the exit");
-    //Room start("Twisty little passages, all alike");
-    //start.north = &exit;
-    //exit.south = &start;
-    //printf("%s\n", start.description);
-    //const char* line = readline("What do you do?: ");
-    //printf("%s\n", exit.description);
-    lua_close(L);
+    //GameEngine game;
+    //game.runWorld(worldFile);
+
+    //Console::print("\n\n\x1b[31mGame Over\x1b[0m");
+
     return 0;
+}
+
+void onNorth() {
+    Console::print(room.north->description);
 }

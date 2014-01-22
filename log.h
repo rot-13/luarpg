@@ -1,3 +1,6 @@
+#ifndef LOG_H_
+#define LOG_H_
+
 #include <stdarg.h>
 
 class Log {
@@ -17,3 +20,5 @@ class Log {
         static void log(const char* prefix, int level, const char* string, va_list args);
         static int mLevel;
 };
+
+#endif // LOG_H_

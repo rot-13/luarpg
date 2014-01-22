@@ -2,7 +2,7 @@
 #include "log.h"
 #include "console.h"
 
-int Log::mLevel;
+int Log::mLevel = Log::LEVEL_DEBUG;
 
 void Log::debug(const char *string, ...) {
     va_list args;
