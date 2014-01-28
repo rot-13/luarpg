@@ -9,15 +9,18 @@
 namespace StyledText {
     class StyleNode : public Node {
         public:
-            StyleNode(Style style);
-            Style getStyle() { return mStyle; }
+            StyleNode();
+            StyleNode(CStyle style);
+            ~StyleNode();
+            const CStyle* getStyle() const { return &mStyle; }
 
-            operator<<(const Node* node);
-            std::iterator<const Node*> begin();
-            std::iterator<const Node*> end();
+            StyleNode& operator<<(const Node& node);
+            StyleNode& operator<<(const std::string string);
+            std::vector<const Node*>::const_iterator begin() const;
+            std::vector<const Node*>::const_iterator end() const;
 
         private:
-            Style mStyle;
+            CStyle mStyle;
             std::vector<const Node*> mChildren;
     };
 }

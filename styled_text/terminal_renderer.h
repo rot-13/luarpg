@@ -10,22 +10,22 @@
 namespace StyledText {
     class TerminalRenderer {
         public:
-            static std::string render(const Node* styledText);
+            static std::string render(const Node& styledText);
 
         private:
             void parse(const Node* node);
-            void pushStyle(const Style* style);
+            void pushStyle(const CStyle* style);
             void popStyle();
             void appendText(const TextNode* text);
-            void appendStyle(const Style* style);
+            void appendStyle(const CStyle* style);
             void clearStyle();
 
-            Style* createInheritedStyle(const Style* style, const Style* parent);
-            std::string styleToString(const Style* style);
+            CStyle* createInheritedStyle(const CStyle* style, const CStyle* parent);
+            std::string styleToString(const CStyle* style);
             int styleColorToANSI(int color);
             std::string getText() { return mOutput; }
 
-            std::vector<Style*> mStyleStack;
+            std::vector<CStyle*> mStyleStack;
             std::string mOutput;
     };
 }

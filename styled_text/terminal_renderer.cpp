@@ -1,17 +1,20 @@
+#include <sstream>
 #include "terminal_renderer.h"
 
-std::string TerminalRenderer::render(const Node* styledText) {
+using namespace StyledText;
+
+std::string TerminalRenderer::render(const Node& styledText) {
     TerminalRenderer renderer;
 
-    renderer.parse(styledText);
+    renderer.parse(&styledText);
 
     return renderer.getText();
 }
 
 void TerminalRenderer::parse(const Node* node) {
-    if (node->getType() == NodeType::Text) {
+    if (node->getType() == NodeType::TextType) {
         appendText(static_cast<const TextNode*>(node));
-    } else if (node->getType() == NodeType::Style) {
+    } else if (node->getType() == NodeType::StyleType) {
         const StyleNode *styleNode = static_cast<const StyleNode*>(node);
         pushStyle(styleNode->getStyle());
         for (auto iter = styleNode->begin(); iter != styleNode->end(); ++iter) {
@@ -21,17 +24,21 @@ void TerminalRenderer::parse(const Node* node) {
     }
 }
 
-void TerminalRenderer::pushStyle(const Style* style) {
-    const Style* currentStyle = mStyleStack.back();
-
-    Style* newStyle = createInheritedStyle(style, currentStyle);
+void TerminalRenderer::pushStyle(const CStyle* style) {
+    CStyle* newStyle;
+    if (mStyleStack.size() > 0) {
+        const CStyle* currentStyle = mStyleStack.back();
+        newStyle = createInheritedStyle(style, currentStyle);
+    } else {
+        newStyle = new CStyle(*style);
+    }
 
     mStyleStack.push_back(newStyle);
     appendStyle(newStyle);
 }
 
 void TerminalRenderer::popStyle() {
-    delete mStyleStack.back();
+    //delete mStyleStack.back();
     mStyleStack.pop_back();
     if (mStyleStack.size() > 0) {
         appendStyle(mStyleStack.back());
@@ -44,7 +51,7 @@ void TerminalRenderer::appendText(const TextNode* text) {
     mOutput += text->getText();
 }
 
-void TerminalRenderer::appendStyle(const Style* style) {
+void TerminalRenderer::appendStyle(const CStyle* style) {
     clearStyle();
     mOutput += styleToString(style);
 }
@@ -53,32 +60,32 @@ void TerminalRenderer::clearStyle() {
     mOutput += "\x1b[0m";
 }
 
-Style* TerminalRenderer::createInheritedStyle(const Style* style, const Style* parent) {
-    Color fgColor = (style.getFgColor() != COLOR_NONE ? style.getFgColor() : parent.getFgColor());
-    Color bgColor = (style.getBgColor() != COLOR_NONE ? style.getBgColor() : parent.getBgColor());
-    StyleFlag flags = style.getFlags() | parent.getFlags();
+CStyle* TerminalRenderer::createInheritedStyle(const CStyle* style, const CStyle* parent) {
+    Color fgColor = (style->getFgColor() != CStyle::COLOR_NONE ? style->getFgColor() : parent->getFgColor());
+    Color bgColor = (style->getBgColor() != CStyle::COLOR_NONE ? style->getBgColor() : parent->getBgColor());
+    StyleFlag flags = style->getFlags() | parent->getFlags();
 
-    return new Style(fgColor, bgColor, flags);
+    return new CStyle(fgColor, bgColor, flags);
 }
 
-std::string TerminalRenderer::styleToString(const Style* style) {
+std::string TerminalRenderer::styleToString(const CStyle* style) {
     std::vector<int> ansiCodes;
-    if (style.getFgColor() != Style::COLOR_NONE) {
-        ansiCodes.push_back(30 + styleColorToANSI(style.getFgColor()));
+    if (style->getFgColor() != CStyle::COLOR_NONE) {
+        ansiCodes.push_back(30 + styleColorToANSI(style->getFgColor()));
     }
-    if (style.getBgColor() != Style::COLOR_NONE) {
-        ansiCodes.push_back(40 + styleColorToANSI(style.getBgColor()));
+    if (style->getBgColor() != CStyle::COLOR_NONE) {
+        ansiCodes.push_back(40 + styleColorToANSI(style->getBgColor()));
     }
-    if (style.isBold()) {
+    if (style->isBold()) {
         ansiCodes.push_back(1);
     }
-    if (style.isBlink()) {
+    if (style->isBlink()) {
         ansiCodes.push_back(5);
     }
-    if (style.isNegative()) {
+    if (style->isNegative()) {
         ansiCodes.push_back(7);
     }
-    if (style.isUnderline()) {
+    if (style->isUnderline()) {
         ansiCodes.push_back(24);
     }
     std::stringstream ss;
@@ -93,28 +100,28 @@ std::string TerminalRenderer::styleToString(const Style* style) {
 
 int TerminalRenderer::styleColorToANSI(Color color) {
     switch (color) {
-        case Style::COLOR_BLACK:
+        case CStyle::COLOR_BLACK:
             return 0;
             break;
-        case Style::COLOR_RED:
+        case CStyle::COLOR_RED:
             return 1;
             break;
-        case Style::COLOR_GREEN:
+        case CStyle::COLOR_GREEN:
             return 2;
             break;
-        case Style::COLOR_YELLO:
+        case CStyle::COLOR_YELLOW:
             return 3;
             break;
-        case Style::COLOR_BLUE:
+        case CStyle::COLOR_BLUE:
             return 4;
             break;
-        case Style::COLOR_MAGENTA:
+        case CStyle::COLOR_MAGENTA:
             return 5;
             break;
-        case Style::COLOR_CYAN:
+        case CStyle::COLOR_CYAN:
             return 6;
             break;
-        case Style::COLOR_WHITE:
+        case CStyle::COLOR_WHITE:
             return 7;
             break;
         default:

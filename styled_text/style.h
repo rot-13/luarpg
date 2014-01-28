@@ -5,7 +5,7 @@ namespace StyledText {
     typedef int Color;
     typedef unsigned int StyleFlag;
 
-    class Style {
+    class CStyle {
         public:
             static const Color COLOR_NONE    = -1;
             static const Color COLOR_BLACK   = 0;
@@ -23,14 +23,14 @@ namespace StyledText {
             static const StyleFlag FLAG_UNDERLINE = 0b0100;
             static const StyleFlag FLAG_NEGATIVE  = 0b1000;
 
-            Style(Color fgColor, Color bgColor, StyleFlag flags);
-            Color getFgColor() { return mFgColor; }
-            Color getBgColor() { return mBgColor; }
-            StyleFlag getFlags() { return mFlags; }
-            bool isBold();
-            bool isBlink();
-            bool isUnderline();
-            bool isNegative();
+            CStyle(Color fgColor, Color bgColor=COLOR_NONE, StyleFlag flags=FLAG_NONE);
+            Color getFgColor() const;
+            Color getBgColor() const;
+            StyleFlag getFlags() const;
+            bool isBold() const;
+            bool isBlink() const;
+            bool isUnderline() const;
+            bool isNegative() const;
 
         private:
             Color mFgColor;

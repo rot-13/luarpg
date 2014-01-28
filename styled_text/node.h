@@ -3,16 +3,16 @@
 
 namespace StyledText {
     enum NodeType {
-        Style,
-        Text
-    }
+        StyleType,
+        TextType
+    };
 
     class Node {
         public:
-            NodeType getType() { return mType; }
+            NodeType getType() const { return mType; }
 
         protected:
-            Node(NodeType type);
+            Node(NodeType type) : mType(type) {}
 
         private:
             NodeType mType;

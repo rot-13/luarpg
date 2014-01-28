@@ -8,7 +8,7 @@ namespace StyledText {
     class TextNode : public Node {
         public:
             TextNode(std::string text);
-            std::string getText() { return mText; }
+            std::string getText() const { return mText; }
 
         private:
             std::string mText;

@@ -7,18 +7,28 @@
 #include "room.h"
 #include "actions/room_action_handler.h"
 
+#include "styled_text/terminal_renderer.h"
+#include "styled_text/helpers.h"
+
 extern "C" {
     #include "lua5.1/lua.h"
     #include "lua5.1/lualib.h"
     #include "lua5.1/lauxlib.h"
 }
 
-Room room("Starting room");
-Room north("North room");
+using namespace StyledText;
+
+Room room(blank("Starting room"));
+Room north(blue("North room"));
 
 void onNorth();
 
 int main(int argc, char* argv[]) {
+    Text& node = blank(bold("Welcome to", magenta("Lua", blink("RPG")), "It's pretty"), negative("awesome"));
+
+    std::string str = TerminalRenderer::render(node);
+
+    Console::print(str.c_str());
 
     room.north = &north;
 
@@ -26,7 +36,7 @@ int main(int argc, char* argv[]) {
     rah.setOnNorth(&onNorth);
 
     bool running = true;
-    Console::print(room.description);
+    Console::print(TerminalRenderer::render(room.description).c_str());
     while (running) {
         char* input = Console::read("> ");
         if (strcmp(input, "exit") == 0) {
@@ -59,5 +69,5 @@ int main(int argc, char* argv[]) {
 }
 
 void onNorth() {
-    Console::print(room.north->description);
+    Console::print(TerminalRenderer::render(room.north->description).c_str());
 }
