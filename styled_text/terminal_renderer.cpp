@@ -11,26 +11,24 @@ std::string TerminalRenderer::render(const Node& styledText) {
     return renderer.getText();
 }
 
-void TerminalRenderer::parse(const Node* node) {
-    if (node->getType() == NodeType::TextType) {
+void TerminalRenderer::parse(const Node& node) {
+    if (node.getType() == NodeType::TextType) {
         appendText(static_cast<const TextNode*>(node));
-    } else if (node->getType() == NodeType::StyleType) {
-        const StyleNode *styleNode = static_cast<const StyleNode*>(node);
-        pushStyle(styleNode->getStyle());
-        for (auto iter = styleNode->begin(); iter != styleNode->end(); ++iter) {
+    } else if (node.getType() == NodeType::StyleType) {
+        const StyleNode& styleNode = static_cast<const StyleNode&>(node);
+        pushStyle(styleNode.getStyle());
+        for (auto iter = styleNode.begin(); iter != styleNode.end(); ++iter) {
             parse((*iter));
         }
         popStyle();
     }
 }
 
-void TerminalRenderer::pushStyle(const CStyle* style) {
-    CStyle* newStyle;
+void TerminalRenderer::pushStyle(const CStyle& style) {
+    CStyle& newStyle = style;
     if (mStyleStack.size() > 0) {
-        const CStyle* currentStyle = mStyleStack.back();
+        const CStyle& currentStyle = mStyleStack.back();
         newStyle = createInheritedStyle(style, currentStyle);
-    } else {
-        newStyle = new CStyle(*style);
     }
 
     mStyleStack.push_back(newStyle);
