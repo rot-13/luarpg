@@ -6,40 +6,52 @@ const char* RoomActionHandler::ACTION_SOUTH = "go south";
 const char* RoomActionHandler::ACTION_WEST = "go west";
 const char* RoomActionHandler::ACTION_EAST = "go east";
 
-RoomActionHandler::RoomActionHandler(Room* room) {
-    mRoom = room;
-}
-
-std::vector<const char*> RoomActionHandler::getActions() {
-    std::vector<const char*> list;
-
-    if (mRoom->north) {
-        list.push_back(ACTION_NORTH);
-    }
-
-    if (mRoom->south) {
-        list.push_back(ACTION_SOUTH);
-    }
-
-    if (mRoom->west) {
-        list.push_back(ACTION_WEST);
-    }
-
-    if (mRoom->east) {
-        list.push_back(ACTION_EAST);
-    }
-
-    return list;
-}
-
-void RoomActionHandler::runAction(const char* action) {
-    if (strcmp(action, ACTION_NORTH) == 0) {
-        if (mOnNorthCallback) {
-            mOnNorthCallback();
+RoomActionHandler::RoomActionHandler(Room& room) : BaseActionHandler(room) {
+    registerAction(ACTION_NORTH, [this] (Room& room) -> bool {
+        return room.north != nullptr;
+    }, [this] (Room& room) {
+        if (this->mNorthCallback) {
+            this->mNorthCallback(room, room.north);
         }
-    }
+    });
+
+    registerAction(ACTION_SOUTH, [this] (Room& room) -> bool {
+        return room.south != nullptr;
+    }, [this] (Room &room) {
+        if (this->mSouthCallback) {
+            this->mSouthCallback(room, room.south);
+        }
+    });
+
+    registerAction(ACTION_WEST, [this] (Room& room) -> bool {
+        return room.west != nullptr;
+    }, [this] (Room &room) {
+        if (this->mWestCallback) {
+            this->mWestCallback(room, room.west);
+        }
+    });
+
+    registerAction(ACTION_EAST, [this] (Room& room) -> bool {
+        return room.east != nullptr;
+    }, [this] (Room &room) {
+        if (this->mEastCallback) {
+            this->mEastCallback(room, room.east);
+        }
+    });
 }
 
-void RoomActionHandler::setOnNorth(OnNorthCallback callback) {
-    mOnNorthCallback = callback;
+void RoomActionHandler::setNorthCallback(RoomCallback callback) {
+    mNorthCallback = callback;
+}
+
+void RoomActionHandler::setSouthCallback(RoomCallback callback) {
+    mSouthCallback = callback;
+}
+
+void RoomActionHandler::setWestCallback(RoomCallback callback) {
+    mWestCallback = callback;
+}
+
+void RoomActionHandler::setEastCallback(RoomCallback callback) {
+    mEastCallback = callback;
 }

@@ -6,7 +6,7 @@
 #include "console.h"
 
 GameEngine::GameEngine() {
-    mLuaState = NULL;
+    mLuaState = nullptr;
 }
 
 void GameEngine::runWorld(const char* worldFile) {
@@ -32,7 +32,7 @@ void GameEngine::handleInput(const char* input) {
 }
 
 void GameEngine::initLua() {
-    if (mLuaState != NULL) {
+    if (mLuaState) {
         closeLua();
     }
     mLuaState = lua_open();
@@ -40,8 +40,8 @@ void GameEngine::initLua() {
 }
 
 void GameEngine::closeLua() {
-    if (mLuaState != NULL) {
+    if (mLuaState) {
         lua_close(mLuaState);
-        mLuaState = NULL;
+        mLuaState = nullptr;
     }
 }

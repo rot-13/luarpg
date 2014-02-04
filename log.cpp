@@ -38,7 +38,7 @@ void Log::setLevel(int level) {
 
 void Log::log(const char *prefix, int level, const char* string, va_list args) {
     if (mLevel <= level) {
-        int bufferLength = vsnprintf(NULL, 0, string, args) + 1; // 1 for null-termination
+        int bufferLength = vsnprintf(nullptr, 0, string, args) + 1; // 1 for null-termination
         if (bufferLength > 0) {
             char *msg = new char[bufferLength];
             vsnprintf(msg, bufferLength, string, args);

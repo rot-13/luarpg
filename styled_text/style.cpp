@@ -2,6 +2,9 @@
 
 using namespace StyledText;
 
+CStyle::CStyle(const CStyle& other) :
+    mFgColor(other.mFgColor), mBgColor(other.mBgColor), mFlags(other.mFlags) {}
+
 CStyle::CStyle(Color fgColor, Color bgColor, StyleFlag flags) :
     mFgColor(fgColor), mBgColor(bgColor), mFlags(flags) {}
 

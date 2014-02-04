@@ -1,20 +1,28 @@
+#ifndef ROOM_ACTION_HANDLER_H_
+#define ROOM_ACTION_HANDLER_H_
+
 #include "base_action_handler.h"
 #include "../room.h"
 
-typedef void (*OnNorthCallback)();
-
-class RoomActionHandler: public BaseActionHandler {
+class RoomActionHandler: public BaseActionHandler<Room> {
     public:
-        RoomActionHandler(Room* room);
-        virtual std::vector<const char*> getActions();
-        virtual void runAction(const char* action);
-        void setOnNorth(OnNorthCallback callback);
+        typedef std::function<void(Room&, Room&)> RoomCallback;
+
+        RoomActionHandler(Room& room);
+        void setNorthCallback(RoomCallback);
+        void setSouthCallback(RoomCallback);
+        void setWestCallback(RoomCallback);
+        void setEastCallback(RoomCallback);
         static const char* ACTION_NORTH;
         static const char* ACTION_SOUTH;
         static const char* ACTION_WEST;
         static const char* ACTION_EAST;
 
     private:
-        OnNorthCallback mOnNorthCallback;
-        Room* mRoom;
+        RoomCallback mNorthCallback;
+        RoomCallback mSouthCallback;
+        RoomCallback mWestCallback;
+        RoomCallback mEastCallback;
 };
+
+#endif // ROOM_ACTION_HANDLER_H_

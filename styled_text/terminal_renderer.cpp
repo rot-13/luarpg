@@ -6,37 +6,38 @@ using namespace StyledText;
 std::string TerminalRenderer::render(const Node& styledText) {
     TerminalRenderer renderer;
 
-    renderer.parse(&styledText);
+    renderer.parse(styledText);
 
     return renderer.getText();
 }
 
 void TerminalRenderer::parse(const Node& node) {
     if (node.getType() == NodeType::TextType) {
-        appendText(static_cast<const TextNode*>(node));
+        appendText(static_cast<const TextNode&>(node));
     } else if (node.getType() == NodeType::StyleType) {
         const StyleNode& styleNode = static_cast<const StyleNode&>(node);
         pushStyle(styleNode.getStyle());
         for (auto iter = styleNode.begin(); iter != styleNode.end(); ++iter) {
-            parse((*iter));
+            parse(**iter);
         }
         popStyle();
     }
 }
 
-void TerminalRenderer::pushStyle(const CStyle& style) {
-    CStyle& newStyle = style;
+void TerminalRenderer::pushStyle(const CStyle* style) {
+    CStyle* newStyle = nullptr;
+    const CStyle* currentStyle = nullptr;
     if (mStyleStack.size() > 0) {
-        const CStyle& currentStyle = mStyleStack.back();
-        newStyle = createInheritedStyle(style, currentStyle);
+        currentStyle = mStyleStack.back();
     }
+    newStyle = createInheritedStyle(style, currentStyle);
 
     mStyleStack.push_back(newStyle);
     appendStyle(newStyle);
 }
 
 void TerminalRenderer::popStyle() {
-    //delete mStyleStack.back();
+    delete mStyleStack.back();
     mStyleStack.pop_back();
     if (mStyleStack.size() > 0) {
         appendStyle(mStyleStack.back());
@@ -45,8 +46,8 @@ void TerminalRenderer::popStyle() {
     }
 }
 
-void TerminalRenderer::appendText(const TextNode* text) {
-    mOutput += text->getText();
+void TerminalRenderer::appendText(const TextNode& text) {
+    mOutput += text.getText();
 }
 
 void TerminalRenderer::appendStyle(const CStyle* style) {
@@ -59,11 +60,15 @@ void TerminalRenderer::clearStyle() {
 }
 
 CStyle* TerminalRenderer::createInheritedStyle(const CStyle* style, const CStyle* parent) {
-    Color fgColor = (style->getFgColor() != CStyle::COLOR_NONE ? style->getFgColor() : parent->getFgColor());
-    Color bgColor = (style->getBgColor() != CStyle::COLOR_NONE ? style->getBgColor() : parent->getBgColor());
-    StyleFlag flags = style->getFlags() | parent->getFlags();
+    if (parent) {
+        Color fgColor = (style->getFgColor() != CStyle::COLOR_NONE ? style->getFgColor() : parent->getFgColor());
+        Color bgColor = (style->getBgColor() != CStyle::COLOR_NONE ? style->getBgColor() : parent->getBgColor());
+        StyleFlag flags = style->getFlags() | parent->getFlags();
 
-    return new CStyle(fgColor, bgColor, flags);
+        return new CStyle(fgColor, bgColor, flags);
+    } else {
+        return new CStyle(*style);
+    }
 }
 
 std::string TerminalRenderer::styleToString(const CStyle* style) {

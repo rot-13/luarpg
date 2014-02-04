@@ -13,10 +13,10 @@ namespace StyledText {
             static std::string render(const Node& styledText);
 
         private:
-            void parse(const Node* node);
+            void parse(const Node& node);
             void pushStyle(const CStyle* style);
             void popStyle();
-            void appendText(const TextNode* text);
+            void appendText(const TextNode& text);
             void appendStyle(const CStyle* style);
             void clearStyle();
 

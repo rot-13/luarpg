@@ -8,7 +8,7 @@
 #include "actions/room_action_handler.h"
 
 #include "styled_text/terminal_renderer.h"
-#include "styled_text/helpers.h"
+#include "styled_text/text.h"
 
 extern "C" {
     #include "lua5.1/lua.h"
@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
         rah.runAction(input);
     }
 
-    //char* worldFile = NULL;
+    //char* worldFile = nullptr;
 
     //if (argc > 1) {
         //worldFile = argv[1];

@@ -1,7 +1,7 @@
 #ifndef ROOM_H_
 #define ROOM_H_
 
-#include "styled_text/helpers.h"
+#include "styled_text/text.h"
 
 class Room {
     public:

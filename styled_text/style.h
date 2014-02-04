@@ -23,6 +23,7 @@ namespace StyledText {
             static const StyleFlag FLAG_UNDERLINE = 0b0100;
             static const StyleFlag FLAG_NEGATIVE  = 0b1000;
 
+            CStyle(const CStyle&);
             CStyle(Color fgColor, Color bgColor=COLOR_NONE, StyleFlag flags=FLAG_NONE);
             Color getFgColor() const;
             Color getBgColor() const;

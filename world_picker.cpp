@@ -33,7 +33,7 @@ std::vector<char*> WorldPicker::listWorlds(const char* worldFolder) {
     DIR *dir = opendir(worldFolder);
     struct dirent *entry = readdir(dir);
 
-    while (entry != NULL) {
+    while (entry) {
         if (entry->d_type == DT_REG) {
             char* worldName = new char[strlen(entry->d_name)];
             strcpy(worldName, entry->d_name);
