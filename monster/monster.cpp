@@ -1,29 +1,34 @@
 #include "monster.h"
+#include <sstream>
 
 void Monster::init() {
-    this.health = 50;
+    this->health = 50;
 }
 
-Stats Monster::getStats() {
+Stats Monster::getStats() const {
     Stats stats;
-    stats.insert(Stat("health", this.health));
+    stats.insert({ std::string("health"), std::to_string(this->health) });
     return stats;
 }
 
-std::string Monster::getDescription() {
-    return "Large monster";
+StyledText::Text& Monster::getDescription() const {
+    return StyledText::text("Large monster");
+}
+
+bool Monster::isAlive() const {
+    return this->health > 0;
 }
 
 AttackResult Monster::attack() {
-    return { 10, "The monster farts in your general direction" };
+    return { 10, StyledText::text("The monster", StyledText::green("farts"), "in your general direction") };
 }
 
 AttackResult Monster::takeDamage(Damage damage) {
-    if (damage > this.health) {
-        damage = this.health;
-        this.health = 0;
+    if (damage > this->health) {
+        damage = this->health;
+        this->health = 0;
     } else {
-        this.health -= damage;
+        this->health -= damage;
     }
-    return { damage, std::string("The monster takes ") << damage << " points of damage" };
+    return { damage, StyledText::text("The monster takes", StyledText::red(std::to_string(damage)), "points of damage") };
 }

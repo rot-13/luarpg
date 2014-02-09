@@ -3,7 +3,7 @@
 const char* MonsterActionHandler::ACTION_ATTACK = "attack";
 
 MonsterActionHandler::MonsterActionHandler(Monster& monster) : BaseActionHandler(monster) {
-    registerAction(ACTION_ATTACK, [this] (Monster& monster) -> bool {
+    registerAction(ACTION_ATTACK, [this] (const Monster& monster) -> bool {
         return monster.isAlive();
     }, [this] (Monster& monster) {
         if (this->mAttackCallback) {

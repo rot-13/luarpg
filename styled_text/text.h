@@ -9,83 +9,83 @@ namespace StyledText {
     typedef StyleNode Text;
 
     template<typename... T>
-    Text& blank(T&... args) {
+    Text& text(const T&... args) {
         return text(CStyle(CStyle::COLOR_NONE), args...);
     }
 
     template<typename... T>
-    Text& black(T&... args) {
+    Text& black(const T&... args) {
         return text(CStyle(CStyle::COLOR_BLACK), args...);
     }
 
     template<typename... T>
-    Text& red(T&... args) {
+    Text& red(const T&... args) {
         return text(CStyle(CStyle::COLOR_RED), args...);
     }
 
     template<typename... T>
-    Text& green(T&... args) {
+    Text& green(const T&... args) {
         return text(CStyle(CStyle::COLOR_GREEN), args...);
     }
 
     template<typename... T>
-    Text& yellow(T&... args) {
+    Text& yellow(const T&... args) {
         return text(CStyle(CStyle::COLOR_YELLOW), args...);
     }
 
     template<typename... T>
-    Text& blue(T&... args) {
+    Text& blue(const T&... args) {
         return text(CStyle(CStyle::COLOR_BLUE), args...);
     }
 
     template<typename... T>
-    Text& magenta(T&... args) {
+    Text& magenta(const T&... args) {
         return text(CStyle(CStyle::COLOR_MAGENTA), args...);
     }
 
     template<typename... T>
-    Text& cyan(T&... args) {
+    Text& cyan(const T&... args) {
         return text(CStyle(CStyle::COLOR_CYAN), args...);
     }
 
     template<typename... T>
-    Text& white(T&... args) {
+    Text& white(const T&... args) {
         return text(CStyle(CStyle::COLOR_WHITE), args...);
     }
 
     template<typename... T>
-    Text& bold(T&... args) {
+    Text& bold(const T&... args) {
         return text(CStyle(CStyle::COLOR_NONE, CStyle::COLOR_NONE, CStyle::FLAG_BOLD), args...);
     }
 
     template<typename... T>
-    Text& blink(T&... args) {
+    Text& blink(const T&... args) {
         return text(CStyle(CStyle::COLOR_NONE, CStyle::COLOR_NONE, CStyle::FLAG_BLINK), args...);
     }
 
     template<typename... T>
-    Text& underline(T&... args) {
+    Text& underline(const T&... args) {
         return text(CStyle(CStyle::COLOR_NONE, CStyle::COLOR_NONE, CStyle::FLAG_UNDERLINE), args...);
     }
 
     template<typename... T>
-    Text& negative(T&... args) {
+    Text& negative(const T&... args) {
         return text(CStyle(CStyle::COLOR_NONE, CStyle::COLOR_NONE, CStyle::FLAG_NEGATIVE), args...);
     }
 
     template<typename First>
-    void concat(Text& node, First& first) {
+    void concat(Text& node, const First& first) {
         node << first;
     }
 
     template<typename First, typename... Rest>
-    void concat(Text& node, First& first, Rest&... rest) {
+    void concat(Text& node, const First& first, const Rest&... rest) {
         node << first << " ";
         concat(node, rest...);
     }
 
     template<typename... T>
-    Text& text(CStyle style, T&... args) {
+    Text& text(CStyle style, const T&... args) {
         Text* sn = new Text(style);
         concat(*sn, args...);
         return *sn;

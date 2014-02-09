@@ -2,16 +2,10 @@
 #define MONSTER_H_
 
 #include <string>
-#include <pair>
+#include <utility>
 #include <map>
 #include "../styled_text/text.h"
-
-typedef int Damage;
-
-typedef struct {
-    Damage damage;
-    StyledText::Text& attackText;
-} AttackResult;
+#include "../attack_result.h"
 
 typedef std::pair<std::string, std::string> Stat;
 typedef std::map<std::string, std::string> Stats;
@@ -19,8 +13,9 @@ typedef std::map<std::string, std::string> Stats;
 class Monster {
     public:
         void init();
-        Stats getStats();
-        StyledText::Text& getDescription();
+        Stats getStats() const;
+        StyledText::Text& getDescription() const;
+        bool isAlive() const;
         AttackResult attack();
         AttackResult takeDamage(Damage damage);
 

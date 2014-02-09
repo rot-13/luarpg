@@ -1,10 +1,11 @@
 #ifndef MONSTER_ACTION_HANDLER_H_
 #define MONSTER_ACTION_HANDLER_H_
 
+#include <functional>
 #include "base_action_handler.h"
 #include "../monster/monster.h"
 
-class MonsterActionHandler : public BaseActionHandler {
+class MonsterActionHandler : public BaseActionHandler<Monster> {
     public:
         typedef std::function<void(Monster&)> AttackCallback;
 

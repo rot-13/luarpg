@@ -1,6 +1,7 @@
 #ifndef ROOM_ACTION_HANDLER_H_
 #define ROOM_ACTION_HANDLER_H_
 
+#include <functional>
 #include "base_action_handler.h"
 #include "../room.h"
 

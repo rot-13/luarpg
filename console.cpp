@@ -1,5 +1,14 @@
 #include "console.h"
 #include "readline.h"
+#include "styled_text/terminal_renderer.h"
+
+void Console::print(const StyledText::Text& text) {
+    print(StyledText::TerminalRenderer::render(text));
+}
+
+void Console::print(const std::string string) {
+    std::cout << string << std::endl;
+}
 
 void Console::print(const char* line, ...) {
     va_list args;

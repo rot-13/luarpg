@@ -7,35 +7,35 @@ const char* RoomActionHandler::ACTION_WEST = "go west";
 const char* RoomActionHandler::ACTION_EAST = "go east";
 
 RoomActionHandler::RoomActionHandler(Room& room) : BaseActionHandler(room) {
-    registerAction(ACTION_NORTH, [this] (Room& room) -> bool {
+    registerAction(ACTION_NORTH, [this] (const Room& room) -> bool {
         return room.north != nullptr;
     }, [this] (Room& room) {
         if (this->mNorthCallback) {
-            this->mNorthCallback(room, room.north);
+            this->mNorthCallback(room, *room.north);
         }
     });
 
-    registerAction(ACTION_SOUTH, [this] (Room& room) -> bool {
+    registerAction(ACTION_SOUTH, [this] (const Room& room) -> bool {
         return room.south != nullptr;
     }, [this] (Room &room) {
         if (this->mSouthCallback) {
-            this->mSouthCallback(room, room.south);
+            this->mSouthCallback(room, *room.south);
         }
     });
 
-    registerAction(ACTION_WEST, [this] (Room& room) -> bool {
+    registerAction(ACTION_WEST, [this] (const Room& room) -> bool {
         return room.west != nullptr;
     }, [this] (Room &room) {
         if (this->mWestCallback) {
-            this->mWestCallback(room, room.west);
+            this->mWestCallback(room, *room.west);
         }
     });
 
-    registerAction(ACTION_EAST, [this] (Room& room) -> bool {
+    registerAction(ACTION_EAST, [this] (const Room& room) -> bool {
         return room.east != nullptr;
     }, [this] (Room &room) {
         if (this->mEastCallback) {
-            this->mEastCallback(room, room.east);
+            this->mEastCallback(room, *room.east);
         }
     });
 }

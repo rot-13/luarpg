@@ -2,6 +2,7 @@
 #define ROOM_H_
 
 #include "styled_text/text.h"
+#include "monster/monster.h"
 
 class Room {
     public:
