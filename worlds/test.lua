@@ -1,1 +1,5 @@
-print "Hello 2"
+string = {
+  "The monster ",
+  { bold = "farts" },
+  " in your general direction"
+}

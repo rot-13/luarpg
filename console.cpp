@@ -26,6 +26,8 @@ char* Console::read(const char* prompt) {
         historyInitialized = true;
     }
     char* line = readline(prompt);
-    add_history(line);
+    if (line && *line) {
+        add_history(line);
+    }
     return line;
 }

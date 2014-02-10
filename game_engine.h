@@ -1,11 +1,8 @@
 #ifndef GAME_ENGINE_H_
 #define GAME_ENGINE_H_
 
-extern "C" {
-    #include "lua5.1/lua.h"
-    #include "lua5.1/lualib.h"
-    #include "lua5.1/lauxlib.h"
-}
+#include <string>
+#include "lua.h"
 
 class GameEngine {
     public:
@@ -13,7 +10,8 @@ class GameEngine {
         void runWorld(const char* worldFile);
 
     private:
-        void handleInput(const char* input);
+        std::string getInput() const;
+        void handleInput(const std::string input);
         void initLua();
         void closeLua();
 

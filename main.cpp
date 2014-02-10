@@ -18,6 +18,8 @@ extern "C" {
     #include "lua5.1/lauxlib.h"
 }
 
+#include "lua/text.h"
+
 using namespace StyledText;
 
 Room* currentRoom = nullptr;
@@ -29,45 +31,55 @@ RoomActionHandler* rah = nullptr;
 void setRoom(Room& nextRoom);
 
 int main(int argc, char* argv[]) {
-    room.north = &north;
-    north.south = &room;
+    //room.north = &north;
+    //north.south = &room;
 
-    Console::print(bold("You wake up..."));
+    //Console::print(bold("You wake up..."));
 
-    setRoom(room);
+    //setRoom(room);
 
-    Monster monster;
-    monster.init();
+    //Monster monster;
+    //monster.init();
 
-    MonsterActionHandler mah(monster);
-    mah.setAttackCallback([] (Monster& monster) {
-        AttackResult res = monster.takeDamage(10);
-        Console::print(res.attackText);
-        if (monster.isAlive()) {
-            AttackResult counter = monster.attack();
-            Console::print(counter.attackText);
-            Console::print(text("You take", red(std::to_string(counter.damage)), "damage"));
-        } else {
-            Console::print(text("The monster is dead"));
-        }
-    });
+    //MonsterActionHandler mah(monster);
+    //mah.setAttackCallback([] (Monster& monster) {
+        //AttackResult res = monster.takeDamage(10);
+        //Console::print(res.attackText);
+        //if (monster.isAlive()) {
+            //AttackResult counter = monster.attack();
+            //Console::print(counter.attackText);
+            //Console::print(text("You take", red(std::to_string(counter.damage)), "damage"));
+        //} else {
+            //Console::print(text("The monster is dead"));
+        //}
+    //});
 
-    Console::print(monster.getDescription());
+    //Console::print(monster.getDescription());
 
-    bool running = true;
-    while (running) {
-        char* input = Console::read("> ");
-        if (strcmp(input, "exit") == 0) {
-            return 0;
-        }
-        if (strcmp(input, "list") == 0) {
-            std::vector<const char*> list = mah.getActions();
-            for (int i = 0; i < list.size(); ++i) {
-                Console::print(list[i]);
-            }
-        }
-        mah.runAction(input);
-    }
+    //bool running = true;
+    //while (running) {
+        //char* input = Console::read("> ");
+        //if (strcmp(input, "exit") == 0) {
+            //return 0;
+        //}
+        //if (strcmp(input, "list") == 0) {
+            //std::vector<const char*> list = mah.getActions();
+            //for (int i = 0; i < list.size(); ++i) {
+                //Console::print(list[i]);
+            //}
+        //}
+        //mah.runAction(input);
+    //}
+    lua_State* state = lua_open();
+    luaL_openlibs(state);
+
+    luaL_dofile(state, "worlds/test.lua");
+
+    lua_getglobal(state, "string");
+
+    StyledText::Text* text = Lua::Text::fromLuaState(state, lua_gettop(state));
+
+    Console::print(*text);
 
     return 0;
 }

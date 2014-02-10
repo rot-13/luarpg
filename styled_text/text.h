@@ -90,6 +90,8 @@ namespace StyledText {
         concat(*sn, args...);
         return *sn;
     }
+
+    Text& make();
 }
 
 #endif // STYLED_TEXT_TEXT_H_

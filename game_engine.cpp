@@ -1,6 +1,8 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
+#include <memory>
+#include <algorithm>
 #include "game_engine.h"
 #include "log.h"
 #include "console.h"
@@ -17,16 +19,14 @@ void GameEngine::runWorld(const char* worldFile) {
     // TODO: init world
 
     while (mRunning) {
-        char* input = Console::read("> ");
-        handleInput(input);
-        delete[] input;
+        handleInput(getInput());
     }
     closeLua();
 }
 
-void GameEngine::handleInput(const char* input) {
-    Log::debug("Got input: \"%s\"", input);
-    if (strcmp(input, "exit") == 0) {
+void GameEngine::handleInput(const std::string input) {
+    Log::debug("Got input: \"%s\"", input.c_str());
+    if (input.compare("exit") == 0) {
         mRunning = false;
     }
 }
@@ -44,4 +44,11 @@ void GameEngine::closeLua() {
         lua_close(mLuaState);
         mLuaState = nullptr;
     }
+}
+
+std::string GameEngine::getInput() const {
+    std::shared_ptr<char> input(Console::read("> "));
+    std::string inputString = input.get();
+    std::transform(inputString.begin(), inputString.end(), inputString.begin(), ::tolower);
+    return inputString;
 }
