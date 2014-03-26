@@ -3,11 +3,11 @@
 
 class GameState {
     public:
+        GameState();
 
     private:
-        Player* mPlayer;
-        Room* mCurrentRoom;
-        std::vector<BaseActionHandler*> mActionHandlers;
+        Player& mPlayer;
+        Room& mCurrentRoom;
 };
 
 #endif // GAME_STATE_H

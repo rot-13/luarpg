@@ -20,6 +20,8 @@ extern "C" {
 
 #include "lua/text.h"
 
+#include "text_input.h"
+
 using namespace StyledText;
 
 Room* currentRoom = nullptr;
@@ -70,16 +72,26 @@ int main(int argc, char* argv[]) {
         //}
         //mah.runAction(input);
     //}
-    lua_State* state = lua_open();
-    luaL_openlibs(state);
+    //lua_State* state = lua_open();
+    //luaL_openlibs(state);
 
-    luaL_dofile(state, "worlds/test.lua");
+    //luaL_dofile(state, "worlds/test.lua");
 
-    lua_getglobal(state, "string");
+    //lua_getglobal(state, "string");
 
-    StyledText::Text* text = Lua::Text::fromLuaState(state, lua_gettop(state));
+    //StyledText::Text* text = Lua::Text::fromLuaState(state, lua_gettop(state));
 
-    Console::print(*text);
+    //Console::print(*text);
+
+    //std::string input = Console::read("> ");
+
+    //TextInput ti = TextInput::parseInput(input);
+    //Console::print(ti.verb);
+    //Console::print(ti.params);
+
+    GameEngine gameEngine;
+
+    gameEngine.runWorld("./worlds/test.lua");
 
     return 0;
 }

@@ -3,6 +3,7 @@
 
 #include <string>
 #include "lua.h"
+#include "entity/entity.h"
 
 class GameEngine {
     public:
@@ -11,7 +12,8 @@ class GameEngine {
 
     private:
         std::string getInput() const;
-        void handleInput(const std::string input);
+        void handleInput(const std::string inputString);
+        Entity* findEntity(const std::string entityName);
         void initLua();
         void closeLua();
 
